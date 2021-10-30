@@ -5,7 +5,7 @@
 
 ![image](https://user-images.githubusercontent.com/73152464/139418741-f9bb772f-7983-4300-934a-99ae19cb839a.png)
 
-### EniesLobby akan dijadikan sebagai DNS Master, Water7 akan dijadikan DNS Slave, dan Skypie akan digunakan sebagai Web Server. Terdapat 2 Client yaitu Loguetown, dan Alabasta. Semua node terhubung pada router Foosha, sehingga dapat mengakses internet.
+EniesLobby akan dijadikan sebagai DNS Master, Water7 akan dijadikan DNS Slave, dan Skypie akan digunakan sebagai Web Server. Terdapat 2 Client yaitu Loguetown, dan Alabasta. Semua node terhubung pada router Foosha, sehingga dapat mengakses internet.
 
 **Jawab:**
 
@@ -218,7 +218,7 @@ echo '
 
 ![8-1](https://user-images.githubusercontent.com/73921231/139532094-efa449e4-e577-488b-b75b-27ce9b4d3fd2.jpg)
 
-### 9. URL www.franky.yyy.com/index.php/home dapat diakses menjadi www.franky.yyy.com/home
+### 9. URL `www.franky.yyy.com/index.php/home` dapat diakses menjadi `www.franky.yyy.com/home`
 
 1. Membuat file `.htaccess` pada `/var/www/franky.T03.com/`, sebelum itu digunakan command `a2enmod rewrite`
 
@@ -234,7 +234,7 @@ RewriteRule ^([^\.]+)$ $1.php [NC,L]
 
 ![9-1](https://user-images.githubusercontent.com/73921231/139532099-4722ae6a-93ff-4368-8e78-0700fb2edd0b.jpg)
 
-### 10. Subdomain www.super.franky.yyy.com memiliki DocumentRoot pada /var/www/super.franky.yyy.com
+### 10. Subdomain `www.super.franky.yyy.com` memiliki DocumentRoot pada `/var/www/super.franky.yyy.com`
 
 1. Melakukan mkdir `/var/www/super.franky.T03.com/`. Lalu mendownload zip `super.franky.zip` yang sudah disediakan
 
@@ -281,7 +281,7 @@ echo '
 
 3. Enable file konfigurasi yang telah dibuat menggunakan `a2ensite super.franky.T03.com.conf`
 
-### 11. Folder /public dapat melakukan directory listing saja
+### 11. Folder `/public` pada `super.franky.T03.com` dapat melakukan directory listing saja
 
 1. Tambahkan konfigurasi pada `super.franky.T03.com` di folder `/etc/apache2/sites-available/` yang sudah dibuat
 
@@ -311,7 +311,7 @@ echo '
 
 ![12-1](https://user-images.githubusercontent.com/73921231/139532119-c093721e-3c02-40d3-b44e-dcdea125b480.jpg)
 
-### 13. Mengakses file asset www.super.franky.yyy.com/public/js menjadi www.super.franky.yyy.com/js
+### 13. Mengakses file asset `www.super.franky.yyy.com/public/js` menjadi `www.super.franky.yyy.com/js`
 
 1. Tambahkan konfigurasi pada `super.franky.T03.com` di folder `/etc/apache2/sites-available/` yang sudah dibuat
 
@@ -323,7 +323,7 @@ echo '
 
 ![13-1](https://user-images.githubusercontent.com/73921231/139532125-44ae3093-27bd-48a6-9f85-9ff94c960c6b.jpg)
 
-### 14. Dan Luffy meminta untuk web www.general.mecha.franky.yyy.com hanya bisa diakses dengan port 15000 dan port 15500 
+### 14. Dan Luffy meminta untuk web `www.general.mecha.franky.yyy.com` hanya bisa diakses dengan `port 15000` dan `port 15500`
 
 **Jawab:**
 Ketika mengakses www.general.mecha.franky.T03.com tanpa port yang spesifik dengan perintah `lynx http://www.general.mecha.franky.T03.com` akan menghasilkan seperti gambar dibawah
