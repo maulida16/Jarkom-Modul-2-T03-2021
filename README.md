@@ -75,6 +75,11 @@ Mengedit file `franky.T03.com` pada folder `/etc/bind/kaizoku` menjadi sebagai b
 
 ![image](https://user-images.githubusercontent.com/73152464/139528356-2af3c7b5-d78b-4e3e-843a-8597500c8831.png)
 
+Dicek menggunakan client Loguetown
+
+![image](https://user-images.githubusercontent.com/73152464/139530240-ff7cf59e-bbe9-49dd-87ce-72b82adee5c7.png)
+
+
 ### 4. Buat juga reverse domain untuk domain utama
 
 **Jawab:**
@@ -109,18 +114,64 @@ Mencoba ping dari Loguetown
 
 ### 6. Setelah itu terdapat subdomain mecha.franky.yyy.com dengan alias www.mecha.franky.yyy.com yang didelegasikan dari EniesLobby ke Water7 dengan IP menuju ke Skypie dalam folder sunnygo
 
+**Jawab:**
 
+Mengedit file `franky.T03.com` pada folder `/etc/bind/kaizoku` menjadi sebagai berikut, menambahkan subdomain `mecha.franky.T03.com` dan aliasnya yaitu `www.mecha.franky.T03.com`
 
+![image](https://user-images.githubusercontent.com/73152464/139530178-7e3a0533-a37f-400b-b325-279a75416548.png)
 
+Mengedit file `/etc/bind/named.conf.options` Ennieslobby menjadi sebagai berikut
+```
+options {
+        directory "/var/cache/bind";
+        // forwarders {
+        //      0.0.0.0;
+        // };
+        allow-query{any;};
 
+        auth-nxdomain no;    # conform to RFC1035
+        listen-on-v6 { any; };
+};
+```
+Lalu file `/etc/bind/named.conf.local` pada Water7 diedit menjadi berikut
 
+![image](https://user-images.githubusercontent.com/73152464/139530357-cb46e5c5-97e8-4783-a3bb-8cbab643d5b8.png)
 
+Dan file `/etc/bind/named.conf.options` pada Water7 diedit menjadi berikut
+```
+options {
+        directory "/var/cache/bind";
+        // forwarders {
+        //      0.0.0.0;
+        // };
+        allow-query{any;};
 
+        auth-nxdomain no;    # conform to RFC1035
+        listen-on-v6 { any; };
+};
+```
 
+Kemudian membuat direktori `sunnygo` pada `/etc/bind` di Water7 dengan perintah `mkdir /etc/bind/sunnygo`
+Setelah itu mencopy db.local pada `etc/bind` ke direktori Sunnygo dan mengedit namanya menjadi `mecha.franky.T03.com` dengan command `cp /etc/bind/db.local /etc/bind/sunnygo/mecha.franky.T03.com`
+Dan mengedit filenya menjadi sebagai berikut
 
+![image](https://user-images.githubusercontent.com/73152464/139530554-9bd46330-b846-480b-be5e-9a874c6313e9.png)
 
+Mecoba ping `mecha.franky.T03.com` dan `www.mecha.franky.T03.com` dari Loguetown
 
+![image](https://user-images.githubusercontent.com/73152464/139530577-65efa02e-8cbc-4afc-a40b-51e913ef3aff.png)
 
+###7. Untuk memperlancar komunikasi Luffy dan rekannya, dibuatkan subdomain melalui Water7 dengan nama general.mecha.franky.yyy.com dengan alias www.general.mecha.franky.yyy.com yang mengarah ke Skypie
+
+**Jawab:**
+
+Mengedit file `/etc/bind/sunnygo/mecha.franky.T03.com` dan menambahkan subdomain `general.mecha.franky.T03.com` dan aliasnya yaitu `www.general.mecha.franky.T03.com`
+
+![image](https://user-images.githubusercontent.com/73152464/139530648-587f32bc-64f3-4037-99cc-8f3c2c4d8d53.png)
+
+Mencoba ping subdomain `general.mecha.franky.T03.com` dan aliasnya `www.general.mecha.franky.T03.com` pada Loguetown
+
+![image](https://user-images.githubusercontent.com/73152464/139530676-7c524abc-536e-469b-9e68-0892c69b4668.png)
 
 ### 14. Dan Luffy meminta untuk web www.general.mecha.franky.yyy.com hanya bisa diakses dengan port 15000 dan port 15500 
 
