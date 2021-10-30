@@ -54,7 +54,7 @@ Ketika mengakses www.general.mecha.franky.T03.com tanpa port yang spesifik denga
 
 ![image](https://media.discordapp.net/attachments/858956223604850688/903888317551083550/unknown.png)
 
-Namun apabila kita menambahkan port spesifik dengan perintah `lynx www.general.mecha.franky.T03.com:15000` maka akan menampilkan seperti dibawah. 
+Namun apabila kita menambahkan port spesifik dengan perintah `lynx www.general.mecha.franky.T03.com:15000` atau `www.general.mecha.franky.T03.com:15500` maka akan menampilkan seperti dibawah. 
 
 ![image](https://media.discordapp.net/attachments/858956223604850688/903888524162506762/unknown.png)
 
@@ -62,8 +62,11 @@ Namun apabila kita menambahkan port spesifik dengan perintah `lynx www.general.m
 Pertama kita menyiapkan folder `/var/www/general.mecha.franky.T03.com` kemudian download file zip yang sudah disediakan. 
 ```
 mkdir /var/www/general.mecha.franky.T03.com
+
 wget https://github.com/FeinardSlim/Praktikum-Modul-2-Jarkom/raw/main/general.mecha.franky.zip -P /var/www/general.mecha.franky.T03.com
+
 unzip /var/www/general.mecha.franky.T03.com/general.mecha.franky.zip -d /var/www/general.mecha.franky.T03.com
+
 mv /var/www/general.mecha.franky.T03.com/general.mecha.franky/* /var/www/general.mecha.franky.T03.com
 ```
 Kedua menyiapkan file konfigurasi di `/etc/apache2/sites-available/general.mecha.franky.T03.com.conf` kemudian mengaktifkan file konfigurasi dengan perintah `a2ensite general.mecha.franky.T03.com.conf`.
@@ -103,16 +106,22 @@ Require valid-user
 ```
 
 
-### (15) dengan autentikasi username luffy dan password onepiece dan file di /var/www/general.mecha.franky.yyy 
+### 15. dengan autentikasi username luffy dan password onepiece dan file di /var/www/general.mecha.franky.yyy 
 
 **Jawab:**
-Masukkan username `luffy` dan password `onepiece` pada link `www.general.mecha.franky.T03.com`.
+Masukkan username `luffy` dan password `onepiece` pada link `www.general.mecha.franky.T03.com:15000` atau `www.general.mecha.franky.T03.com:15500`.
 
 ![image](https://media.discordapp.net/attachments/858956223604850688/903888524162506762/unknown.png)
 
 Apabila berhasil memasukkan password maka akan menampilkan gambar dibawah.
 
-[image](https://media.discordapp.net/attachments/858956223604850688/903888622690910258/unknown.png)
+![image](https://media.discordapp.net/attachments/858956223604850688/903888622690910258/unknown.png)
+
+**Langkah penyelesaian:**
+Membuat file htpasswd di `/var/www/general.mecha.franky.T03` dengan perintah berikut
+```
+htpasswd -cb /var/www/general.mecha.franky.T03 luffy onepiece
+```
 
 ### (16)  Dan setiap kali mengakses IP Skypie akan dialihkan secara otomatis ke www.franky.yyy.com 
 
