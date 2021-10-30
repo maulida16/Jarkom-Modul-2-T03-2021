@@ -173,6 +173,156 @@ Mencoba ping subdomain `general.mecha.franky.T03.com` dan aliasnya `www.general.
 
 ![image](https://user-images.githubusercontent.com/73152464/139530676-7c524abc-536e-469b-9e68-0892c69b4668.png)
 
+### 8. Konfigurasi Webserver `www.franky.yyy.com` dengan DocumentRoot pada `/var/www/franky.yyy.com`
+
+1. Langkah pertama adalah melakukan instalasi webserver pada node skypie seperti `apt-get install apache2`, `apt-get install libapache2-mod-php7.0`. Dan `apt-get install lynx` pada node client untuk dilakukannya test pengaksesan webserver.
+
+2. Melakukan mkdir `/var/www/franky.T03.com/`. Lalu mendownload zip `franky.zip` yang sudah disediakan
+
+```
+wget https://github.com/FeinardSlim/Praktikum-Modul-2-Jarkom/raw/main/franky.zip -P /var/www/franky.T03.com
+
+unzip /var/www/franky.T03.com/franky.zip -d /var/www/franky.T03.com
+
+mv /var/www/franky.T03.com/franky/* /var/www/franky.T03.com
+
+mv /var/www/franky.T03.com/franky /var/www/franky.T03.com/home
+```
+
+3. Membuat file konfigurasi untuk `franky.T03.com` pada folder `/etc/apache2/sites-available/`
+
+```
+echo '
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/franky.T03.com
+    ServerName franky.T03.com
+    ServerAlias www.franky.T03.com
+
+        <Directory /var/www/franky.T03.com>
+                Options +FollowSymLinks -Multiviews
+                AllowOverride All
+        </Directory>
+
+        Alias "/home" "/var/www/franky.T03.com/index.php/home"
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+' > /etc/apache2/sites-available/franky.T03.com.conf
+```
+
+4. Enable file konfigurasi yang telah dibuat menggunakan `a2ensite franky.T03.com.conf`
+
+5. Test webserver melalui client menggunakan `lynx http://www.franky.T03.com` atau `lynx http://franky.T03.com`
+
+![8-1](https://user-images.githubusercontent.com/73921231/139532094-efa449e4-e577-488b-b75b-27ce9b4d3fd2.jpg)
+
+### 9. URL www.franky.yyy.com/index.php/home dapat diakses menjadi www.franky.yyy.com/home
+
+1. Membuat file `.htaccess` pada `/var/www/franky.T03.com/`, sebelum itu digunakan command `a2enmod rewrite`
+
+```
+echo '
+RewriteEngine On
+RewriteCond %{REQUEST_FILENAME} !-d
+RewriteRule ^([^\.]+)$ $1.php [NC,L]
+' > /var/www/franky.T03.com/.htaccess
+```
+
+2. Test webserver melalui client menggunakan `lynx http://www.franky.T03.com/home` atau `lynx http://franky.T03.com/home`
+
+![9-1](https://user-images.githubusercontent.com/73921231/139532099-4722ae6a-93ff-4368-8e78-0700fb2edd0b.jpg)
+
+### 10. Subdomain www.super.franky.yyy.com memiliki DocumentRoot pada /var/www/super.franky.yyy.com
+
+1. Melakukan mkdir `/var/www/super.franky.T03.com/`. Lalu mendownload zip `super.franky.zip` yang sudah disediakan
+
+```
+wget https://github.com/FeinardSlim/Praktikum-Modul-2-Jarkom/raw/main/super.franky.zip -P /var/www/super.franky.T03.com
+
+unzip /var/www/super.franky.T03.com/super.franky.zip -d /var/www/super.franky.T03.com
+
+mv /var/www/super.franky.T03.com/super.franky/* /var/www/super.franky.T03.com
+```
+
+2. Membuat file konfigurasi untuk `super.franky.T03.com` pada folder `/etc/apache2/sites-available/`
+
+```
+echo '
+<VirtualHost *:80>
+        ServerAdmin webmaster@localhost
+        DocumentRoot /var/www/super.franky.T03.com
+        ServerName super.franky.T03.com
+        ServerAlias www.super.franky.T03.com
+
+        ErrorDocument 404 /error/404.html
+        ErrorDocument 500 /error/404.html
+        ErrorDocument 502 /error/404.html
+        ErrorDocument 503 /error/404.html
+        ErrorDocument 504 /error/404.html
+
+        <Directory /var/www/super.franky.T03.com/public>
+                Options +Indexes
+        </Directory>
+
+        <Directory /var/www/super.franky.T03.com>
+                Options +FollowSymLinks -Multiviews
+                AllowOverride All
+        </Directory>
+
+        Alias "/js" "/var/www/super.franky.T03.com/public/js"
+
+        ErrorLog ${APACHE_LOG_DIR}/error.log
+        CustomLog ${APACHE_LOG_DIR}/access.log combined
+</VirtualHost>
+' > /etc/apache2/sites-available/super.franky.T03.com.conf
+```
+
+3. Enable file konfigurasi yang telah dibuat menggunakan `a2ensite super.franky.T03.com.conf`
+
+### 11. Folder /public dapat melakukan directory listing saja
+
+1. Tambahkan konfigurasi pada `super.franky.T03.com` di folder `/etc/apache2/sites-available/` yang sudah dibuat
+
+```
+        <Directory /var/www/super.franky.T03.com/public>
+                Options +Indexes
+        </Directory>
+```
+
+2. Test subdomain melalui client menggunakan `lynx http://www.super.franky.T03.com/public` atau `lynx http://super.franky.T03.com/public`
+
+![11-1](https://user-images.githubusercontent.com/73921231/139532106-0f9f1a82-e3c6-4a92-a45a-37db150a9523.jpg)
+
+### 12. Menyiapkan error file 404.html pada folder /error untuk mengganti error kode pada apache
+
+1. Tambahkan konfigurasi pada `super.franky.T03.com` di folder `/etc/apache2/sites-available/` yang sudah dibuat
+
+```
+        ErrorDocument 404 /error/404.html
+        ErrorDocument 500 /error/404.html
+        ErrorDocument 502 /error/404.html
+        ErrorDocument 503 /error/404.html
+        ErrorDocument 504 /error/404.html
+```
+
+2. Test subdomain melalui client menggunakan `lynx http://www.super.franky.T03.com/bebasbiarerror` atau `lynx http://super.franky.T03.com/bebasbiarerror`
+
+![12-1](https://user-images.githubusercontent.com/73921231/139532119-c093721e-3c02-40d3-b44e-dcdea125b480.jpg)
+
+### 13. Mengakses file asset www.super.franky.yyy.com/public/js menjadi www.super.franky.yyy.com/js
+
+1. Tambahkan konfigurasi pada `super.franky.T03.com` di folder `/etc/apache2/sites-available/` yang sudah dibuat
+
+```
+        Alias "/js" "/var/www/super.franky.T03.com/public/js"
+```
+
+2. Test subdomain melalui client menggunakan `lynx http://www.super.franky.T03.com/js` atau `lynx http://super.franky.T03.com/js`
+
+![13-1](https://user-images.githubusercontent.com/73921231/139532125-44ae3093-27bd-48a6-9f85-9ff94c960c6b.jpg)
+
 ### 14. Dan Luffy meminta untuk web www.general.mecha.franky.yyy.com hanya bisa diakses dengan port 15000 dan port 15500 
 
 **Jawab:**
