@@ -161,7 +161,7 @@ Mecoba ping `mecha.franky.T03.com` dan `www.mecha.franky.T03.com` dari Loguetown
 
 ![image](https://user-images.githubusercontent.com/73152464/139530577-65efa02e-8cbc-4afc-a40b-51e913ef3aff.png)
 
-###7. Untuk memperlancar komunikasi Luffy dan rekannya, dibuatkan subdomain melalui Water7 dengan nama general.mecha.franky.yyy.com dengan alias www.general.mecha.franky.yyy.com yang mengarah ke Skypie
+### 7. Untuk memperlancar komunikasi Luffy dan rekannya, dibuatkan subdomain melalui Water7 dengan nama general.mecha.franky.yyy.com dengan alias www.general.mecha.franky.yyy.com yang mengarah ke Skypie
 
 **Jawab:**
 
