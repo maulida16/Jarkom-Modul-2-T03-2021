@@ -1,5 +1,6 @@
 # Jarkom-Modul-2-T03-2021
 
+## Soal dan Penyelesaian
 ### 1. Luffy adalah seorang yang akan jadi Raja Bajak Laut. Demi membuat Luffy menjadi Raja Bajak Laut, Nami ingin membuat sebuah peta, bantu Nami untuk membuat peta berikut:
 
 ![image](https://user-images.githubusercontent.com/73152464/139418741-f9bb772f-7983-4300-934a-99ae19cb839a.png)
@@ -50,11 +51,11 @@ Di dalam folder `kaizoku`,
 ### 14. Dan Luffy meminta untuk web www.general.mecha.franky.yyy.com hanya bisa diakses dengan port 15000 dan port 15500 
 
 **Jawab:**
-Ketika mengakses www.general.mecha.franky.T03.com tanpa port yang spesifik dengan perintah `lynx www.general.mecha.franky.T03.com` akan menghasilkan seperti gambar dibawah
+Ketika mengakses www.general.mecha.franky.T03.com tanpa port yang spesifik dengan perintah `lynx http://www.general.mecha.franky.T03.com` akan menghasilkan seperti gambar dibawah
 
 ![image](https://media.discordapp.net/attachments/858956223604850688/903888317551083550/unknown.png)
 
-Namun apabila kita menambahkan port spesifik dengan perintah `lynx www.general.mecha.franky.T03.com:15000` atau `www.general.mecha.franky.T03.com:15500` maka akan menampilkan seperti dibawah. 
+Namun apabila kita menambahkan port spesifik dengan perintah `lynx http://www.general.mecha.franky.T03.com:15000` atau `lynx http://www.general.mecha.franky.T03.com:15500` maka akan menampilkan seperti dibawah. 
 
 ![image](https://media.discordapp.net/attachments/858956223604850688/903888524162506762/unknown.png)
 
@@ -109,7 +110,7 @@ Require valid-user
 ### 15. dengan autentikasi username luffy dan password onepiece dan file di /var/www/general.mecha.franky.yyy 
 
 **Jawab:**
-Masukkan username `luffy` dan password `onepiece` pada link `www.general.mecha.franky.T03.com:15000` atau `www.general.mecha.franky.T03.com:15500`.
+Masukkan username `luffy` dan password `onepiece` pada link `http://www.general.mecha.franky.T03.com:15000` atau `http://www.general.mecha.franky.T03.com:15500`.
 
 ![image](https://media.discordapp.net/attachments/858956223604850688/903888524162506762/unknown.png)
 
@@ -123,7 +124,37 @@ Membuat file htpasswd di `/var/www/general.mecha.franky.T03` dengan perintah ber
 htpasswd -cb /var/www/general.mecha.franky.T03 luffy onepiece
 ```
 
-### (16)  Dan setiap kali mengakses IP Skypie akan dialihkan secara otomatis ke www.franky.yyy.com 
+### 16.  Dan setiap kali mengakses IP Skypie akan dialihkan secara otomatis ke www.franky.yyy.com 
 
+**Jawab:**
+Apabila kita mengakses IP Skypie maka akan langsung dialihkan ke www.franky.T03.com dapat dilihat pada gambar dibawah.
+![image](https://media.discordapp.net/attachments/858956223604850688/903898328046129152/unknown.png)
 
-### (17). Dikarenakan Franky juga ingin mengajak temannya untuk dapat menghubunginya melalui website www.super.franky.yyy.com, dan dikarenakan pengunjung web server pasti akan bingung dengan randomnya images yang ada, maka Franky juga meminta untuk mengganti request gambar yang memiliki substring “franky” akan diarahkan menuju franky.png. Maka bantulah Luffy untuk membuat konfigurasi dns dan web server ini!
+![image](https://media.discordapp.net/attachments/858956223604850688/903898407238787122/unknown.png)
+
+**Langkah penyelesaian:**
+Dengan menambah htaccess di `/var/www/franky.T03`
+
+### 17. Dikarenakan Franky juga ingin mengajak temannya untuk dapat menghubunginya melalui website www.super.franky.yyy.com, dan dikarenakan pengunjung web server pasti akan bingung dengan randomnya images yang ada, maka Franky juga meminta untuk mengganti request gambar yang memiliki substring “franky” akan diarahkan menuju franky.png. Maka bantulah Luffy untuk membuat konfigurasi dns dan web server ini!
+
+**Jawab:**
+Bila kita mengakses gambar yang mengandung nama `franky` selain franky.png di http://www.super.franky.T03.com/public/images maka akan langsung dialihkan ke gambar franky.png. Pada contoh gambar kita mengakses ke gambar not-franky.jpg
+
+![image](https://media.discordapp.net/attachments/858956223604850688/903899223597129768/unknown.png)
+
+![image](https://media.discordapp.net/attachments/858956223604850688/903899328664449084/unknown.png)
+
+Maka akan langsung dialihkan ke franky.png
+![image](https://media.discordapp.net/attachments/858956223604850688/903899387447607376/unknown.png)
+
+**Langkah penyelesaian:**
+Dengan menambahkan perintah tambahan pada `/var/www/super.franky.T03.com/.htaccess` seperti berikut
+```
+RewriteEngine On
+RewriteCond %{REQUEST_URI} ^/public/images/(.*)franky(.*)
+RewriteCond %{REQUEST_URI} !/public/images/franky.png
+RewriteRule .* http://super.franky.T03.com/public/images/franky.png [L]
+```
+
+## Kendala
+1. Masih baru pertama mengoperasikan GNS3 sehingga saat sudah mengerjakan soal shift dan lupa bahwa semua yang sudah ada tidak tersimpan terasa sangat menyayat hati. Ternyata harus disimpan di file bash sehingga tinggal jalankan file bash tersebut.
