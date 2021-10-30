@@ -5,8 +5,11 @@
 
 ![image](https://user-images.githubusercontent.com/73152464/139418741-f9bb772f-7983-4300-934a-99ae19cb839a.png)
 
-EniesLobby akan dijadikan sebagai DNS Master, Water7 akan dijadikan DNS Slave, dan Skypie akan digunakan sebagai Web Server. Terdapat 2 Client yaitu Loguetown, dan Alabasta. Semua node terhubung pada router Foosha, sehingga dapat mengakses internet.
-#### Berikut adalah topologi yang kami buat:
+### EniesLobby akan dijadikan sebagai DNS Master, Water7 akan dijadikan DNS Slave, dan Skypie akan digunakan sebagai Web Server. Terdapat 2 Client yaitu Loguetown, dan Alabasta. Semua node terhubung pada router Foosha, sehingga dapat mengakses internet.
+
+**Jawab:**
+
+Berikut adalah topologi yang kami buat:
 
 ![image](https://user-images.githubusercontent.com/73152464/139419103-8a24e7ee-afa7-4a80-af66-e730e4bd3c6c.png)
 
@@ -31,15 +34,86 @@ Konfigurasi Webserver Skypie:
 
 ![image](https://user-images.githubusercontent.com/73152464/139419657-80918168-70ca-4c29-9668-6972a3da42fe.png)
 
-Pada client Loguetown dan Alabasta, kami melakukan konfigurasi berikut pada `/etc/resolv.conf` agar client dapat terhubung dengan Foosha, Ennieslobby, Water7, dan juga Skypie
-
+a. Pada client Loguetown dan Alabasta, kami melakukan konfigurasi berikut pada `/etc/resolv.conf` agar client dapat terhubung dengan Foosha, Ennieslobby, Water7, dan juga Skypie
+```
+nameserver 192.168.122.1
+nameserver 10.43.2.2
+nameserver 10.43.2.3
+nameserver 10.43.2.4
+```
+Selain membuat konfigurasi untuk menghubungkan antar node, kami juga memjalankan beberapa command dasar untuk menyiapkan node client
+```
+apt-get update
+apt-get install nano
+apt-get install dnsutils
+apt-get install lynx -y
+```
+b. Pada DNS Ennieslobby, konfigurasi pada `/etc/resolv.conf` kami hubungkan dengan router Foosha
+``` nameserver 192.168.122.1 ```
+Terdapat beberapa perintah dasar sebelum menjalankan DNS Ennieslobby, yang paling utama yaitu menginstall bind9
+```
+apt-get install nano
+apt-get update
+apt-get install bind9 -y
+```
 ### 2. Luffy ingin menghubungi Franky yang berada di EniesLobby dengan denden mushi. Kalian diminta Luffy untuk membuat website utama dengan mengakses franky.yyy.com dengan alias www.franky.yyy.com pada folder kaizoku.
 
-Pertama adalah membaut folder `kaizoku` pada `etc/bind/kaizoku`
+**Jawab:**
 
-![image](https://user-images.githubusercontent.com/73152464/139478598-41eb570c-3697-42f8-bccc-9a5ae29f0468.png)
+Pertama adalah membuat folder `kaizoku` pada `etc/bind/` dengan menggunakan perintah `mkdir etc/bind/kaizoku` dan mengcopy file db.local pada path `/etc/bind` ke dalam folder `etc/bind/kaizoku` lalu mengubah namanya menjadi `franky.T03.com`. Setelahnya kami mengonfigurasi kembali file tersebut dengan perintah `nano /etc/bind/kaizoku/franky.T03.com`. Konfigurasinya adalah sebagai berikut:
 
-Di dalam folder `kaizoku`, 
+![image](https://user-images.githubusercontent.com/73152464/139528054-87c13b2a-c793-4112-b7b1-e3e83eaa2af1.png)
+
+Setelah itu dicek melalui client Loguetown
+
+![image](https://user-images.githubusercontent.com/73152464/139528182-abb20ab4-e3e6-4f65-a1ad-37b1ccccef18.png)
+
+### 3. Setelah itu buat subdomain super.franky.yyy.com dengan alias www.super.franky.yyy.com yang diatur DNS nya di EniesLobby dan mengarah ke Skypie
+
+**Jawab:**
+Mengedit file `franky.T03.com` pada folder `/etc/bind/kaizoku` menjadi sebagai berikut, menambahkan subdomain `super.franky.T03.com`
+
+![image](https://user-images.githubusercontent.com/73152464/139528356-2af3c7b5-d78b-4e3e-843a-8597500c8831.png)
+
+### 4. Buat juga reverse domain untuk domain utama
+
+**Jawab:**
+
+Mengedit file `/etc/bind/named.conf.local` pada EniesLobby dan menambahkan reverse dari 3 byte awal dari IP 10.43.2.2 yaitu 2.43.10
+
+![image](https://user-images.githubusercontent.com/73152464/139529457-b5cdf79f-f578-454b-b908-a75a78e4f99a.png)
+
+Selanjutnya mengcopy file `db.local` pada path `/etc/bind` ke dalam folder `etc/bind/kaizoku` lalu mengubah namanya menjadi `2.43.10.in-addr.arpa` dan mengedit filenya seperti gambar berikut:
+
+![image](https://user-images.githubusercontent.com/73152464/139529544-7bf59566-9b20-48fd-b96e-7312869f63fc.png)
+
+Dicek dengan client Loguetown
+
+![image](https://user-images.githubusercontent.com/73152464/139529581-58acffc9-278e-4ff5-bd42-d58af64fcb95.png)
+
+### 5. Supaya tetap bisa menghubungi Franky jika server EniesLobby rusak, maka buat Water7 sebagai DNS Slave untuk domain utama
+
+**Jawab:**
+
+Mengedit file `/etc/bind/named.conf.local` pada Ennieslobby dan disesuaikan dengan syntax berikut, diarahkan ke DNS Slave Water7:
+
+![image](https://user-images.githubusercontent.com/73152464/139529752-fa47539d-e9d1-4b37-be1c-a7ca1accf40f.png)
+
+Lalu pada Water7, file `/etc/bind/named.conf.local` diedit dan IP master diarahkan ke EnniesLobby
+
+![image](https://user-images.githubusercontent.com/73152464/139529782-576d26da-4d2e-43e9-afc5-538956ca6932.png)
+
+Mencoba ping dari Loguetown
+
+![image](https://user-images.githubusercontent.com/73152464/139529812-d04c3def-ffbf-4b09-8a31-7b6ecab9a015.png)
+
+### 6. Setelah itu terdapat subdomain mecha.franky.yyy.com dengan alias www.mecha.franky.yyy.com yang didelegasikan dari EniesLobby ke Water7 dengan IP menuju ke Skypie dalam folder sunnygo
+
+
+
+
+
+
 
 
 
